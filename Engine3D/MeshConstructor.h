@@ -28,10 +28,12 @@ public:
 		Axis,
 		Plane,
 		Cube,
+		Sphere,
 		Octahedron,
 		Tethrahedron,
 	};
 	MeshConstructor(const int type);
+	MeshConstructor(const int type, const float size);
 	MeshConstructor(const MeshConstructor &mesh);
 	MeshConstructor(const std::string& fileName);
 

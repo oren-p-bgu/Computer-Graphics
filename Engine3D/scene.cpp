@@ -1,6 +1,8 @@
 #include "scene.h"
 #include "glad/include/glad/glad.h"
 #include <iostream>
+#include <fstream>
+using namespace std;
 
 	static void printMat(const glm::mat4 mat)
 	{
@@ -39,6 +41,77 @@
 		isActive = false;
 	}
 
+	void Scene::LoadSceneFile(const std::string& fileName) {
+		ifstream sceneFile;
+
+		AddTexture("../res/textures/box0.bmp", false);
+		sceneFile.open(fileName);
+
+		string eyeLine;
+		float xEye, yEye, zEye, bonusEye;
+		getline(sceneFile, eyeLine);
+		sscanf(eyeLine.c_str(), "e %f %f %f %f", &xEye,&yEye, &zEye, &bonusEye);
+		MoveCamera(0, xTranslate, xEye);
+		MoveCamera(0, yTranslate, yEye);
+		MoveCamera(0, zTranslate, zEye);
+
+		string ambientLine;
+		float rAmbient, gAmbient, bAmbient, aAmbient;
+		getline(sceneFile, ambientLine);
+		sscanf(ambientLine.c_str(), "a %f %f %f %f", &rAmbient,&gAmbient, &bAmbient, &aAmbient);
+		// TODO
+
+		string currentLine;
+		char identifier;
+		float arg1, arg2, arg3, arg4;
+		int currentShape = -1;
+		while (getline(sceneFile, currentLine)) {
+			sscanf(currentLine.c_str(), "%c %f %f %f %f", &identifier, &arg1,&arg2, &arg3, &arg4);
+			switch (identifier) {
+			case 'd':
+				// TODO
+				break;
+			case 'p':
+				//TODO
+				break;
+			case 'i':
+				//TODO
+				break;
+			case 'o':
+				if (arg4 > 0) {
+					// Sphere
+					AddShape(Sphere,arg4, -1, TRIANGLES);
+					currentShape++;
+					pickedShape = currentShape;
+					SetShapeTex(currentShape,0);
+					ShapeTransformation(xTranslate, arg1);
+					ShapeTransformation(yTranslate, arg2);
+					ShapeTransformation(zTranslate, arg3);
+					
+					pickedShape = -1;
+				}
+				else {
+					// Plane
+				}
+				break;
+			case 'r':
+				//TODO
+				break;
+			case 't':
+				//TODO
+				break;
+			case 'c':
+				//TODO
+				break;
+			default:
+				cout << "Invalid scene line!" << endl;
+			}
+		}
+
+		sceneFile.close();
+
+	}
+
 	void Scene::AddShapeFromFile(const std::string& fileName,int parent,unsigned int mode)
 	{
 		chainParents.push_back(parent);
@@ -49,6 +122,12 @@
 	{
 		chainParents.push_back(parent);
 		shapes.push_back(new Shape(type,mode));
+	}
+	
+	void Scene::AddShape(int type, float size ,int parent,unsigned int mode)
+	{
+		chainParents.push_back(parent);
+		shapes.push_back(new Shape(type, size, mode));
 	}
 
 	void Scene::AddShapeCopy(int indx,int parent,unsigned int mode)

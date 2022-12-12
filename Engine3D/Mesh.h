@@ -75,6 +75,8 @@ IndexedModel PlaneTriangles();
 
 IndexedModel CubeTriangles();
 
+IndexedModel SphereGenerator(const float Radius);
+
 IndexedModel AxisGenerator();
 
 IndexedModel TethrahedronGenerator();

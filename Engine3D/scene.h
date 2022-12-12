@@ -14,13 +14,16 @@ public:
 	enum transformations{xTranslate, yTranslate, zTranslate, xRotate, yRotate, zRotate, xScale, yScale, zScale, xCameraTranslate, yCameraTranslate, zCameraTranslate};
 	enum modes{POINTS, LINES, LINE_LOOP, LINE_STRIP, TRIANGLES, TRIANGLE_STRIP, TRIANGLE_FAN, QUADS};
 	enum buffers{COLOR, DEPTH, STENCIL, BACK, FRONT, ACCUM, NONE };
-	enum shapes{Axis, Plane, Cube, Octahedron, Tethrahedron, LineCopy, MeshCopy};
+	enum shapes{Axis, Plane, Cube, Sphere, Octahedron, Tethrahedron, LineCopy, MeshCopy};
 	
 	Scene();
 	Scene(float angle,float relationWH,float near, float far);
+
+	void LoadSceneFile(const std::string& fileName);
 	
 	void AddShapeFromFile(const std::string& fileName,int parent,unsigned int mode);
 	virtual void AddShape(int type,int parent,unsigned int mode);
+	void AddShape(int type, float size, int parent, unsigned int mode);
 	void AddShapeCopy(int indx,int parent,unsigned int mode);
 	
 	void AddShader(const std::string& fileName);

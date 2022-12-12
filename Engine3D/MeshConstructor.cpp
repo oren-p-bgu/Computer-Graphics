@@ -31,6 +31,20 @@ MeshConstructor::MeshConstructor(const int type)
 	
 }
 
+MeshConstructor::MeshConstructor(const int type, const float size)
+{
+	switch (type)
+	{
+	case Sphere:
+		 InitMesh(SphereGenerator(size));
+		 break;
+	default:
+		break;
+	}
+	
+}
+
+
 MeshConstructor::MeshConstructor(const std::string& fileName)
 {
 	InitMesh(OBJModel(fileName).ToIndexedModel());

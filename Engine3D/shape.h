@@ -25,6 +25,8 @@ public:
 	
 	Shape(const int SimpleShapeType,unsigned int mode);
 
+	Shape(const int SimpleShapeType, const float size, unsigned int mode);
+
 	void Draw( const std::vector<Shader*> shaders, const std::vector<Texture*> textures,bool isPicking);
 
 	inline void Hide() {toRender = false;}

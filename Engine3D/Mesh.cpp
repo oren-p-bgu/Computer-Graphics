@@ -53,6 +53,88 @@ IndexedModel PlaneTriangles()
 	return model;
 }
 
+IndexedModel SphereGenerator(const float Radius) {
+	double PI = 3.14159;
+	int Resolution = 10;
+	// iniatiate the variable we are going to use
+	float X1, Y1, X2, Y2, Z1, Z2;
+	float inc1, inc2, inc3, inc4, inc5, Radius1, Radius2;
+	std::vector<Vertex> vertices;
+	// texture map
+	std::vector<glm::vec2> t;
+	// normals
+	std::vector<glm::vec3> n;
+	unsigned int indicator = 0;
+	IndexedModel model;
+
+	for (int w = 0; w < Resolution; w++) {
+		for (int h = (-Resolution / 2); h < (Resolution / 2); h++) {
+
+
+			inc1 = (w / (float)Resolution) * 2 * PI;
+			inc2 = ((w + 1) / (float)Resolution) * 2 * PI;
+
+			inc3 = (h / (float)Resolution) * PI;
+			inc4 = ((h + 1) / (float)Resolution) * PI;
+
+
+			X1 = sin(inc1);
+			Y1 = cos(inc1);
+			X2 = sin(inc2);
+			Y2 = cos(inc2);
+
+			// store the upper and lower radius, remember everything is going to be drawn as triangles
+			Radius1 = Radius * cos(inc3);
+			Radius2 = Radius * cos(inc4);
+
+
+
+
+			Z1 = Radius * sin(inc3);
+			Z2 = Radius * sin(inc4);
+
+			// insert the triangle coordinates
+			vertices.push_back(Vertex(  glm::vec3(Radius1 * X1, Z1, Radius1 * Y1),
+										glm::vec2(0,0),
+										glm::vec3(X1, Z1, Y1) / glm::length(glm::vec3(X1, Z1, Y1)),
+										glm::vec3(0,0,1)));
+
+			vertices.push_back(Vertex(glm::vec3(Radius1 * X2, Z1, Radius1 * Y2),
+				glm::vec2(0, 1),
+				glm::vec3(X2, Z1, Y2) / glm::length(glm::vec3(X2, Z1, Y2)),
+				glm::vec3(0, 0, 1)));
+
+			vertices.push_back(Vertex(glm::vec3(Radius2 * X2, Z2, Radius2 * Y2),
+				glm::vec2(1, 1),
+				glm::vec3(X2, Z2, Y2) / glm::length(glm::vec3(X2, Z2, Y2)),
+				glm::vec3(0, 0, 1)));
+
+			vertices.push_back(Vertex(glm::vec3(Radius2 * X1, Z2, Radius2 * Y1),
+				glm::vec2(1, 0),
+				glm::vec3(X1, Z2, Y1) / glm::length(glm::vec3(X1, Z2, Y1)),
+				glm::vec3(0, 0, 1)));
+
+			model.indices.push_back(indicator);
+			model.indices.push_back(indicator+1);
+			model.indices.push_back(indicator+2);
+			model.indices.push_back(indicator);
+			model.indices.push_back(indicator+2);
+			model.indices.push_back(indicator+3);
+			indicator+=4;
+
+		}
+
+	}
+	for (Vertex vertex : vertices) {
+		model.positions.push_back(*vertex.GetPos());
+		model.colors.push_back(*vertex.GetColor());
+		model.normals.push_back(*vertex.GetNormal());
+		model.texCoords.push_back(*vertex.GetTexCoord());
+	}
+	
+	return model;
+}
+
 IndexedModel CubeTriangles()
 {
 	Vertex vertices[] =

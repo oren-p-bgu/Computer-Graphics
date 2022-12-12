@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 # define PI           3.14159265358979323846  /* pi */
+using namespace std;
 static void printMat(const glm::mat4 mat)
 {
 	std::cout<<" matrix:"<<std::endl;
@@ -27,40 +28,12 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 
 void Game::Init()
 {		
+	string sceneFilename = "../scene.txt";
+	LoadSceneFile(sceneFilename);
 
 	AddShader("../res/shaders/pickingShader");	
 	AddShader("../res/shaders/basicShader");
 
-	std::string fileName = "../res/textures/lena256.jpg";
-	//std::string fileName = "../res/textures/box0.bmp";
-	int width = 256;
-	int height = 256;
-	int numComponents = 4;
-	
-    unsigned char* data = stbi_load((fileName).c_str(), &width, &height, &numComponents, 4);
-
-	unsigned char* grayscaled = Grayscale(width,height,data);
-	unsigned char* edges = EdgeDetection(width,height, grayscaled);
-	unsigned char* halftoned = Halftones(width,height,grayscaled);
-	unsigned char* fsalgo = FSAlgorithm(width,height, grayscaled);
-
-	AddTexture(width, height, grayscaled);
-	AddTexture(width, height, edges);
-	AddTexture(width, height, halftoned);
-	AddTexture(width, height, fsalgo);
-
-	free(grayscaled);
-	free(edges);
-	free(halftoned);
-	free(fsalgo);
-
-	AddShape(Plane,-1,TRIANGLES);
-	
-	pickedShape = 0;
-	
-	SetShapeTex(0,0);
-	MoveCamera(0,zTranslate,10);
-	pickedShape = -1;
 	
 	//ReadPixel(); //uncomment when you are reading from the z-buffer
 }
