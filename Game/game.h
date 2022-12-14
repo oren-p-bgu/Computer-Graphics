@@ -1,12 +1,13 @@
 #pragma once
 #include "scene.h"
-
+#include "RayScene.h"
 class Game : public Scene
 {
 public:
 	
 	Game();
 	Game(float angle,float relationWH,float near, float far);
+	RayScene LoadSceneFile(const std::string& fileName);
 	void Init();
 	unsigned char* Grayscale(int width, int height, unsigned char* data);
 	unsigned char* EdgeDetection(int width, int height, unsigned char* data);
@@ -18,5 +19,6 @@ public:
 	void WhenTranslate();
 	void Motion();
 	~Game(void);
+	int samples;
 };
 
