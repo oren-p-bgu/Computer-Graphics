@@ -25,41 +25,44 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 { 	
 }
 
+void Game::BuildRubiksCube(int dimension) {
+	int index = 0;
+	float step = 2 / ((float) dimension - 1);
+	float scale = 1 / ((float) dimension - 1);
+	for (float i = -1; i <= 1; i+= step) {
+
+		for (float j = -1; j <= 1; j+= step) {
+
+			for (float k = -1; k <= 1; k+= step) {
+
+				if (i == -1 || i == 1 || j == -1 || j == 1 || k == -1 || k == 1)
+				{
+					// Only adds the outermost, visibile cubes
+					AddShape(Cube,-1,TRIANGLES);
+					SetShapeTex(index, 0);
+					shapes[index]->MyScale(glm::vec3(scale, scale, scale));
+					shapes[index]->MyTranslate(glm::vec3(i, j, k), 0);
+					index++;
+				}
+			}
+		}
+	}
+}
+
 void Game::Init()
 {		
 
 	AddShader("../res/shaders/pickingShader");	
 	AddShader("../res/shaders/basicShader");
-
-	std::string fileName = "../res/textures/lena256.jpg";
-	//std::string fileName = "../res/textures/box0.bmp";
-	int width = 256;
-	int height = 256;
-	int numComponents = 4;
 	
-    unsigned char* data = stbi_load((fileName).c_str(), &width, &height, &numComponents, 4);
+	AddTexture("../res/textures/plane.png", false);
 
-	unsigned char* grayscaled = Grayscale(width,height,data);
-	unsigned char* edges = EdgeDetection(width,height, grayscaled);
-	unsigned char* halftoned = Halftones(width,height,grayscaled);
-	unsigned char* fsalgo = FSAlgorithm(width,height, grayscaled);
+	BuildRubiksCube(4);
 
-	AddTexture(width, height, grayscaled);
-	AddTexture(width, height, edges);
-	AddTexture(width, height, halftoned);
-	AddTexture(width, height, fsalgo);
-
-	free(grayscaled);
-	free(edges);
-	free(halftoned);
-	free(fsalgo);
-
-	AddShape(Plane,-1,TRIANGLES);
 	
 	pickedShape = 0;
 	
-	SetShapeTex(0,0);
-	MoveCamera(0,zTranslate,10);
+	MoveCamera(0,zTranslate,20);
 	pickedShape = -1;
 	
 	//ReadPixel(); //uncomment when you are reading from the z-buffer

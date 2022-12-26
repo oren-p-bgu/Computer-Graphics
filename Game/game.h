@@ -7,6 +7,7 @@ public:
 	
 	Game();
 	Game(float angle,float relationWH,float near, float far);
+	void BuildRubiksCube(int dimension);
 	void Init();
 	unsigned char* Grayscale(int width, int height, unsigned char* data);
 	unsigned char* EdgeDetection(int width, int height, unsigned char* data);
