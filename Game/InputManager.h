@@ -33,11 +33,8 @@
 					glfwSetWindowShouldClose(window,GLFW_TRUE);
 				break;
 				case GLFW_KEY_SPACE:
-					if(scn->IsActive())
-						scn->Deactivate();
-					else
-						scn->Activate();
-				break;
+					scn->ToggleDirection();
+					break;
 
 				case GLFW_KEY_UP:
 					scn->MoveCamera(0,scn->zTranslate,0.4f);
@@ -48,7 +45,24 @@
 					scn->MoveCamera(0,scn->zTranslate,-0.4f);
 					break;
 
-
+				case GLFW_KEY_R:
+					scn->RotateCubeWall(Right);
+					break;
+				case GLFW_KEY_L:
+					scn->RotateCubeWall(Left);
+					break;
+				case GLFW_KEY_U:
+					scn->RotateCubeWall(Up);
+					break;
+				case GLFW_KEY_D:
+					scn->RotateCubeWall(Down);
+					break;
+				case GLFW_KEY_B:
+					scn->RotateCubeWall(Back);
+					break;
+				case GLFW_KEY_F:
+					scn->RotateCubeWall(Front);
+					break;
 
 			default:
 				break;

@@ -5,6 +5,7 @@
 #include <numbers>
 #include <iostream>
 #include <fstream>
+#include "../build/RubiksCube.h"
 # define PI           3.14159265358979323846  /* pi */
 static void printMat(const glm::mat4 mat)
 {
@@ -25,7 +26,8 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 { 	
 }
 
-void Game::BuildRubiksCube(int dimension) {
+RubiksCube Game::BuildRubiksCube(int dimension) {
+	RubiksCube cube = RubiksCube();
 	int index = 0;
 	float step = 2 / ((float) dimension - 1);
 	float scale = 1 / ((float) dimension - 1);
@@ -37,16 +39,35 @@ void Game::BuildRubiksCube(int dimension) {
 
 				if (i == -1 || i == 1 || j == -1 || j == 1 || k == -1 || k == 1)
 				{
-					// Only adds the outermost, visibile cubes
+					// Only adds the outermost, visible cubes
 					AddShape(Cube,-1,TRIANGLES);
 					SetShapeTex(index, 0);
 					shapes[index]->MyScale(glm::vec3(scale, scale, scale));
 					shapes[index]->MyTranslate(glm::vec3(i, j, k), 0);
+					if (i == -1) {
+						cube.AddToWall(Left,index);
+					}
+					if (i == 1) {
+						cube.AddToWall(Right, index);
+					}
+					if (j == -1) {
+						cube.AddToWall(Down, index);
+					}
+					if (j == 1) {
+						cube.AddToWall(Up, index);
+					}
+					if (k == -1) {
+						cube.AddToWall(Back, index);
+					}
+					if (k == 1) {
+						cube.AddToWall(Front, index);
+					}
 					index++;
 				}
 			}
 		}
 	}
+	return cube;
 }
 
 void Game::Init()
@@ -57,7 +78,7 @@ void Game::Init()
 	
 	AddTexture("../res/textures/plane.png", false);
 
-	BuildRubiksCube(4);
+	rubiksCube = BuildRubiksCube(4);
 
 	
 	pickedShape = 0;

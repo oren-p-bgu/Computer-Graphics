@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "VertexArray.hpp"
 #include <vector>
+#include "../build/RubiksCube.h"
 
 
 class Scene : public MovableGLM
@@ -60,6 +61,16 @@ public:
 	void UpdatePosition(float xpos, float ypos);
 	void MouseProccessing(int button);
 	bool inline IsActive() const { return isActive;} 
+
+	void RotateCubeWall(WallType type);
+	void ToggleDirection() {
+		if (direction ==Clockwise) {
+			direction = CounterClockwise;
+		}
+		else {
+			direction = Clockwise;
+		}
+	}
 	
 	inline void SetShapeTex(int shpIndx,int texIndx){shapes[shpIndx]->SetTexture(texIndx);} 
 	inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);} 
@@ -78,6 +89,9 @@ protected:
 	std::vector<Shader*> shaders;
 	std::vector<int> chainParents;
 	std::vector<Texture*> textures;
+
+	RubiksCube rubiksCube;
+	Direction direction;
 	
 	int pickedShape;
 	

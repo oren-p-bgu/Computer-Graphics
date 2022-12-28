@@ -115,6 +115,8 @@
 		pickedShape = p;
 	}
 
+
+
 	// ASSIGNMENT 1 - Added version of draw with viewport index to allow drawing to different viewports
 	void Scene::Draw(int shaderIndx, int cameraIndx, int buffer, bool toClear, bool debugMode,int viewport)
 	{
@@ -256,6 +258,44 @@
 				MyRotate(yrel/2.0f,glm::vec3(0,0,1),0);
 				WhenRotate();
 			}
+		}
+	}
+
+	// ASSIGNMENT 3
+	void Scene::RotateCubeWall(WallType type)
+	{
+		std::vector<int> wallIndexes = rubiksCube.GetWall(type);
+		glm::vec3 rotationVector;
+		int dir;
+		if (direction == Clockwise) {
+			dir = 1;
+		}
+		else {
+			dir = -1;
+		}
+
+		switch (type) {
+		case (Right):
+			rotationVector = glm::vec3(dir * 1, 0, 0);
+			break;
+		case (Left):
+			rotationVector = glm::vec3(dir * -1, 0, 0);
+			break;
+		case (Up):
+			rotationVector = glm::vec3( 0, dir *1, 0);
+			break;
+		case (Down):
+			rotationVector = glm::vec3( 0, dir *-1, 0);
+			break;
+		case (Front):
+			rotationVector = glm::vec3( 0, 0, dir *1);
+			break;
+		case (Back):
+			rotationVector = glm::vec3( 0, 0, dir *-1);
+			break;
+		}
+		for (int index : wallIndexes) {
+			shapes[index]->MyRotate(90, rotationVector, 0);
 		}
 	}
 
