@@ -1,6 +1,6 @@
 #pragma once
 #include "scene.h"
-#include "../build/RubiksCube.h"
+#include "RubiksCube.h"
 
 class Game : public Scene
 {

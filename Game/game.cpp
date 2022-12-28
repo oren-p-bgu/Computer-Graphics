@@ -5,7 +5,7 @@
 #include <numbers>
 #include <iostream>
 #include <fstream>
-#include "../build/RubiksCube.h"
+#include "RubiksCube.h"
 # define PI           3.14159265358979323846  /* pi */
 static void printMat(const glm::mat4 mat)
 {

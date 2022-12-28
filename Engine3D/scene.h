@@ -4,7 +4,7 @@
 #include "camera.h"
 #include "VertexArray.hpp"
 #include <vector>
-#include "../build/RubiksCube.h"
+#include "RubiksCube.h"
 
 
 class Scene : public MovableGLM
