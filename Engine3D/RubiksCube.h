@@ -2,6 +2,7 @@
 #include <vector>
 #include "MovableGLM.h"
 #include <set>
+#include <map>
 enum WallType {
 	Right,
 	Left,
@@ -17,14 +18,16 @@ enum Direction {
 class RubiksCube : public MovableGLM
 {
 public:
-	RubiksCube() : Cubes(std::vector<std::pair<int, std::set<WallType>>>()){};
+	RubiksCube() : Cubes(std::map<int, std::set<WallType>>()){};
 
 	void AddToWall(WallType type, int index);
 	void RemoveFromWall(WallType type, int index);
 	std::vector<int> GetWall(WallType type);
 	void RotateWall(WallType type);
 
+	void ReplaceType(WallType currentType, WallType rotationType);
+
 private:
-	std::vector<std::pair<int, std::set<WallType>>> Cubes;
+	std::map<int, std::set<WallType>> Cubes;
 };
 

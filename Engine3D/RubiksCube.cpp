@@ -36,14 +36,28 @@ std::vector<int> RubiksCube::GetWall(WallType type)
 void RubiksCube::RotateWall(WallType type)
 {
 	std::vector<int> wall = GetWall(type);
-	switch (type) 
-	{
-	case (Right):
-		for (auto index : wall) {
-			if (cube.second.find(type) != cube.second.end()) {
-				wall.push_back(cube.first);
-			}
+	for (auto index : wall) {
+		auto cube = Cubes[index];
+		if (cube) {
+
 		}
+	}
+}
+
+void RubiksCube::ReplaceType(WallType currentType, WallType rotationType) {
+	switch (rotationType) {
+	case (Right):
+		
+		break;
+	case (Left):
+		break;
+	case (Up):
+		break;
+	case (Down):
+		break;
+	case (Back):
+		break;
+	case (Front):
 		break;
 	}
 }
