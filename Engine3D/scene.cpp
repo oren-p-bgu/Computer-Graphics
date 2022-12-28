@@ -297,7 +297,7 @@
 		for (int index : wallIndexes) {
 			shapes[index]->RotateRelative(45, rotationVector, rubiksCube);
 		}
-		rubiksCube.RotateWall(type);
+		//rubiksCube.RotateWall(type, direction);
 	}
 
 	void Scene::ZeroShapesTrans()

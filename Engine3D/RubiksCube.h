@@ -23,9 +23,9 @@ public:
 	void AddToWall(WallType type, int index);
 	void RemoveFromWall(WallType type, int index);
 	std::vector<int> GetWall(WallType type);
-	void RotateWall(WallType type);
+	void RotateWall(WallType type, Direction direction);
 
-	void ReplaceType(WallType currentType, WallType rotationType);
+	WallType* ReplaceType(WallType currentType, WallType rotationType, Direction direction);
 
 private:
 	std::map<int, std::set<WallType>> Cubes;
