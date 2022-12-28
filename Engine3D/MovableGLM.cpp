@@ -25,10 +25,9 @@ glm::mat4 MovableGLM::MakeTrans(const glm::mat4 &prevTransformations) const
 	return prevTransformations * MakeTrans();
 }
 
-// ASSIGNMENT 3 - Changed order to make rotation around global axes
 glm::mat4 MovableGLM::MakeTrans() const
 {
-	return    rot* trans *scl ;
+	return   trans* rot *scl ;
 }
 
 void MovableGLM::MyTranslate(glm::vec3 delta,int mode)
@@ -39,6 +38,10 @@ void MovableGLM::MyTranslate(glm::vec3 delta,int mode)
 void  MovableGLM::MyRotate(float angle,const glm::vec3 &vec,int mode)
 {
 	rot = glm::rotate(rot,angle,vec);
+}
+
+void MovableGLM::RotateRelative(float angle, const glm::vec3& vec, MovableGLM other) {
+	trans = other.trans * glm::rotate(other.rot, angle, vec) * trans;
 }
 	
 void  MovableGLM::MyScale(glm::vec3 scale)

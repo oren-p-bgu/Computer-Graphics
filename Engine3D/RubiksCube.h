@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-
+#include "MovableGLM.h"
+#include <set>
 enum WallType {
 	Right,
 	Left,
@@ -13,25 +14,17 @@ enum Direction {
 	Clockwise,
 	CounterClockwise
 };
-class RubiksCube
+class RubiksCube : public MovableGLM
 {
 public:
-	RubiksCube() :  RightWall(std::vector<int>()),
-					LeftWall(std::vector<int>()),
-					UpWall(std::vector<int>()),
-					DownWall(std::vector<int>()),
-					FrontWall(std::vector<int>()),
-					BackWall(std::vector<int>()){};
+	RubiksCube() : Cubes(std::vector<std::pair<int, std::set<WallType>>>()){};
 
 	void AddToWall(WallType type, int index);
+	void RemoveFromWall(WallType type, int index);
 	std::vector<int> GetWall(WallType type);
+	void RotateWall(WallType type);
 
 private:
-	std::vector<int> RightWall;
-	std::vector<int> LeftWall;
-	std::vector<int> UpWall;
-	std::vector<int> DownWall;
-	std::vector<int> FrontWall;
-	std::vector<int> BackWall;
+	std::vector<std::pair<int, std::set<WallType>>> Cubes;
 };
 

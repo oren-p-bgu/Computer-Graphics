@@ -254,8 +254,8 @@
 			}
 			else
 			{
-				MyRotate(xrel/2.0f,glm::vec3(1,0,0),0);
-				MyRotate(yrel/2.0f,glm::vec3(0,0,1),0);
+				MyRotate(xrel/2.0f,glm::vec3(0,1,0),0);
+				MyRotate(yrel/2.0f,glm::vec3(1,0,0),0);
 				WhenRotate();
 			}
 		}
@@ -295,8 +295,9 @@
 			break;
 		}
 		for (int index : wallIndexes) {
-			shapes[index]->MyRotate(90, rotationVector, 0);
+			shapes[index]->RotateRelative(45, rotationVector, rubiksCube);
 		}
+		rubiksCube.RotateWall(type);
 	}
 
 	void Scene::ZeroShapesTrans()
