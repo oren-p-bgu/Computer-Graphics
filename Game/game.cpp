@@ -29,6 +29,10 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 RubiksCube Game::BuildRubiksCube(int dimension) {
 	RubiksCube cube = RubiksCube();
 	int index = 0;
+	//AddShape(Plane,-1,TRIANGLES); // debug plane
+	//SetShapeTex(index, 0);
+	//shapes[index]->MyScale(glm::vec3(3, 3, 3));
+	//index++;
 	float step = 2 / ((float) dimension - 1);
 	float scale = 1 / ((float) dimension - 1);
 	for (float i = -1; i <= 1; i+= step) {
@@ -78,7 +82,7 @@ void Game::Init()
 	
 	AddTexture("../res/textures/plane.png", false);
 
-	rubiksCube = BuildRubiksCube(3);
+	rubiksCube = BuildRubiksCube(4);
 
 	
 	pickedShape = 0;

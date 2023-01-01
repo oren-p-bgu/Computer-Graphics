@@ -60,6 +60,7 @@ public:
 
 	void UpdatePosition(float xpos, float ypos);
 	void MouseProccessing(int button);
+	void RotateCube(float amount, glm::vec3 direction);
 	bool inline IsActive() const { return isActive;} 
 
 	void RotateCubeWall(WallType type);

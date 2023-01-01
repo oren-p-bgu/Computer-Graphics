@@ -41,7 +41,32 @@ void  MovableGLM::MyRotate(float angle,const glm::vec3 &vec,int mode)
 }
 
 void MovableGLM::RotateRelative(float angle, const glm::vec3& vec, MovableGLM other) {
-	trans = other.trans * glm::rotate(other.rot, angle, vec) * trans;
+	glm::vec3 thisOrigin = glm::vec3(trans[3][0], trans[3][1], trans[3][2]);
+	glm::vec3 otherOrigin = glm::vec3(other.trans[3][0], other.trans[3][1], other.trans[3][2]);
+	glm::vec3 delta = otherOrigin - thisOrigin;
+
+	glm::vec3 relativeVec = glm::vec3(  other.MakeTrans() *glm::vec4(vec, 1));
+	glm::vec3 newDelta = glm::vec3((glm::rotate(glm::mat4(1), angle, relativeVec) * (other.trans * glm::vec4(thisOrigin, 1)))) - thisOrigin;
+	
+	glm::vec3 vec2 = glm::vec3( glm::inverse(rot) * ( other.rot * glm::vec4(vec, 1)));
+	MyTranslate(newDelta, 0);
+	MyRotate(angle, vec2, 0);
+}
+
+void MovableGLM::RotateRelativeOrigin(float angle, const glm::vec3& vec, MovableGLM other) {
+	glm::vec3 thisOrigin = glm::vec3(trans[3][0], trans[3][1], trans[3][2]);
+	glm::vec3 otherOrigin = glm::vec3(other.trans[3][0], other.trans[3][1], other.trans[3][2]);
+	glm::vec3 delta = otherOrigin - thisOrigin;
+
+	glm::vec3 newDelta = glm::vec3((glm::rotate(glm::mat4(1), angle, vec) * (other.trans * glm::vec4(thisOrigin, 1)))) - thisOrigin;
+	
+	glm::vec3 relativeVec = glm::vec3( glm::vec4(vec, 1) *  MakeTrans() );
+	MyTranslate(newDelta, 0);
+	MyRotate(angle, relativeVec, 0);
+}
+void MovableGLM::RotateRelativeGlobal(float angle, const glm::vec3& vec) {
+	glm::vec3 relativeVec = glm::vec3(glm::vec4(vec, 1) * MakeTrans() );
+	rot = glm::rotate(rot, angle, relativeVec);
 }
 	
 void  MovableGLM::MyScale(glm::vec3 scale)

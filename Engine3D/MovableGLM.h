@@ -10,6 +10,8 @@ public:
 	void MyTranslate(glm::vec3 delta, int mode);
 	void MyRotate(float angle, const glm::vec3 &vec, int mode);
 	void RotateRelative(float angle, const glm::vec3& vec, MovableGLM other);
+	void RotateRelativeOrigin(float angle, const glm::vec3& vec, MovableGLM other);
+	void RotateRelativeGlobal(float angle, const glm::vec3& vec);
 	void MyScale(glm::vec3 scale);
 	void ZeroTrans();
 private:

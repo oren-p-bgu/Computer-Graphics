@@ -254,11 +254,23 @@
 			}
 			else
 			{
-				MyRotate(xrel/2.0f,glm::vec3(0,1,0),0);
-				MyRotate(yrel/2.0f,glm::vec3(1,0,0),0);
+				RotateCube(-xrel/2.0f,glm::vec3(0,1,0));
+				RotateCube(-yrel/2.0f,glm::vec3(1,0,0));
 				WhenRotate();
 			}
 		}
+	}
+
+	void Scene::RotateCube(float amount, glm::vec3 direction) {
+		std::vector<int> indexes;
+		for (auto const& imap : rubiksCube.Cubes)
+			indexes.push_back(imap.first);
+
+		for (int index : indexes) {
+			shapes[index]->RotateRelativeOrigin(amount, direction, rubiksCube);
+		}
+		rubiksCube.RotateRelativeGlobal(amount, direction);
+		// shapes[0]->RotateRelativeGlobal(amount, direction); // Debug plane
 	}
 
 	// ASSIGNMENT 3

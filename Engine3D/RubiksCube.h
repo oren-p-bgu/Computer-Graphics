@@ -27,7 +27,6 @@ public:
 
 	WallType* ReplaceType(WallType currentType, WallType rotationType, Direction direction);
 
-private:
 	std::map<int, std::set<WallType>> Cubes;
 };
 
