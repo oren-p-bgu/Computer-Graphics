@@ -3,14 +3,18 @@
 
 void RubiksCube::AddToWall(WallType type, int index)
 {
+
+	std::set<WallType> typeset = std::set<WallType>();
+	typeset.insert(type);
 	for (std::pair<int, std::set<WallType>> cube: Cubes) {
 		if (cube.first == index) {
-			cube.second.insert(type);
+			std::set<WallType> cubeTypes = cube.second;
+			typeset.insert(cubeTypes.begin(), cubeTypes.end());
+			Cubes.erase(index);
+			Cubes.insert(std::pair<int, std::set<WallType>>(index, typeset));
 			return;
 		}
 	}
-	std::set<WallType> typeset = std::set<WallType>();
-	typeset.insert(type);
 	Cubes.insert(std::pair<int, std::set<WallType>>(index, typeset));
 }
 
@@ -41,15 +45,22 @@ void RubiksCube::RotateWall(WallType type, Direction direction)
 	std::vector<int> wall = GetWall(type);
 	for (auto index : wall) {
 		std::set<WallType> cube = Cubes[index];
+		std::set<std::pair<WallType, WallType>> toReplace = std::set<std::pair<WallType, WallType>>();
 		for (WallType cubeType : cube) {
 			if (cubeType != type) {
 				WallType* replaceType = ReplaceType(cubeType, type, direction);
 				if (replaceType != nullptr) {
-					cube.erase(cubeType);
-					cube.insert(*replaceType);
+					toReplace.insert(std::pair<WallType, WallType>(cubeType, *replaceType));
 				}
 			}
 		}
+		for (std::pair<WallType, WallType> replacePair : toReplace) {
+			cube.erase(replacePair.first);
+		}
+		for (std::pair<WallType, WallType> replacePair : toReplace) {
+			cube.insert(replacePair.second);
+		}
+		Cubes[index] = cube;
 	}
 }
 
@@ -63,23 +74,27 @@ WallType* RubiksCube::ReplaceType(WallType currentType, WallType rotationType, D
 				typeptr = new WallType(Back);
 			else
 				typeptr = new WallType(Front);
+			break;
 		case (Down):
 			if (direction == Clockwise)
 				typeptr = new WallType(Front);
 			else
 				typeptr = new WallType(Back);
+						break;
 
 		case (Front):
 			if (direction == Clockwise)
 				typeptr = new WallType(Up);
 			else
 				typeptr = new WallType(Down);
+						break;
 
 		case (Back):
 			if (direction == Clockwise)
 				typeptr = new WallType(Down);
 			else
 				typeptr = new WallType(Up);
+						break;
 		}
 		break;
 	case (Left):
@@ -89,49 +104,57 @@ WallType* RubiksCube::ReplaceType(WallType currentType, WallType rotationType, D
 				typeptr = new WallType(Front);
 			else
 				typeptr = new WallType(Back);
+						break;
 		case (Down):
 			if (direction == Clockwise)
 				typeptr = new WallType(Back);
 			else
 				typeptr = new WallType(Front);
+						break;
 
 		case (Front):
 			if (direction == Clockwise)
 				typeptr = new WallType(Down);
 			else
 				typeptr = new WallType(Up);
+						break;
 
 		case (Back):
 			if (direction == Clockwise)
 				typeptr = new WallType(Up);
 			else
 				typeptr = new WallType(Down);
+						break;
 		}
 		break;
 	case (Up):
 		switch (currentType) {
 		case (Right):
 			if (direction == Clockwise)
-				typeptr = new WallType(Back);
-			else
 				typeptr = new WallType(Front);
+			else
+				typeptr = new WallType(Back);
+						break;
 		case (Left):
 			if (direction == Clockwise)
-				typeptr = new WallType(Front);
-			else
 				typeptr = new WallType(Back);
+			else
+				typeptr = new WallType(Front);
+						break;
 
 		case (Front):
 			if (direction == Clockwise)
-				typeptr = new WallType(Right);
-			else
 				typeptr = new WallType(Left);
+			else
+				typeptr = new WallType(Right);
+						break;
 
 		case (Back):
 			if (direction == Clockwise)
-				typeptr = new WallType(Left);
-			else
 				typeptr = new WallType(Right);
+			else
+				typeptr = new WallType(Left);
+						break;
 		}
 		break;
 	case (Down):
@@ -141,23 +164,27 @@ WallType* RubiksCube::ReplaceType(WallType currentType, WallType rotationType, D
 				typeptr = new WallType(Front);
 			else
 				typeptr = new WallType(Back);
+						break;
 		case (Left):
 			if (direction == Clockwise)
 				typeptr = new WallType(Back);
 			else
 				typeptr = new WallType(Front);
+						break;
 
 		case (Front):
 			if (direction == Clockwise)
 				typeptr = new WallType(Right);
 			else
 				typeptr = new WallType(Down);
+						break;
 
 		case (Back):
 			if (direction == Clockwise)
 				typeptr = new WallType(Down);
 			else
 				typeptr = new WallType(Right);
+						break;
 		}
 		break;
 	case (Back):
@@ -167,23 +194,27 @@ WallType* RubiksCube::ReplaceType(WallType currentType, WallType rotationType, D
 				typeptr = new WallType(Left);
 			else
 				typeptr = new WallType(Right);
+						break;
 		case (Down):
 			if (direction == Clockwise)
 				typeptr = new WallType(Right);
 			else
 				typeptr = new WallType(Left);
+						break;
 
 		case (Left):
 			if (direction == Clockwise)
 				typeptr = new WallType(Up);
 			else
 				typeptr = new WallType(Down);
+						break;
 
 		case (Right):
 			if (direction == Clockwise)
 				typeptr = new WallType(Down);
 			else
 				typeptr = new WallType(Up);
+						break;
 		}
 		break;
 	case (Front):
@@ -193,23 +224,27 @@ WallType* RubiksCube::ReplaceType(WallType currentType, WallType rotationType, D
 				typeptr = new WallType(Right);
 			else
 				typeptr = new WallType(Left);
+						break;
 		case (Down):
 			if (direction == Clockwise)
 				typeptr = new WallType(Left);
 			else
 				typeptr = new WallType(Right);
+						break;
 
 		case (Right):
 			if (direction == Clockwise)
 				typeptr = new WallType(Up);
 			else
 				typeptr = new WallType(Down);
+						break;
 
 		case (Left):
 			if (direction == Clockwise)
 				typeptr = new WallType(Down);
 			else
 				typeptr = new WallType(Up);
+						break;
 		}
 		break;
 	}
