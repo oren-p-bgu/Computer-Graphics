@@ -78,7 +78,7 @@ void Game::Init()
 	
 	AddTexture("../res/textures/plane.png", false);
 
-	rubiksCube = BuildRubiksCube(4);
+	rubiksCube = BuildRubiksCube(3);
 
 	
 	pickedShape = 0;

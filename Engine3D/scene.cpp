@@ -13,7 +13,7 @@
 		}
 	}
 
-	Scene::Scene()
+	Scene::Scene() : direction(Clockwise)
 	{
 		//
 		glLineWidth(5);
@@ -27,7 +27,7 @@
 		isActive = false;
 	}
 
-	Scene::Scene(float angle,float relationWH,float near1, float far1)
+	Scene::Scene(float angle,float relationWH,float near1, float far1): direction(Clockwise)
 	{
 		//glLineWidth(5);
 		cameras.push_back(new Camera(angle,relationWH,near1,far1));
@@ -276,22 +276,22 @@
 
 		switch (type) {
 		case (Right):
-			rotationVector = glm::vec3(dir * 1, 0, 0);
-			break;
-		case (Left):
 			rotationVector = glm::vec3(dir * -1, 0, 0);
 			break;
+		case (Left):
+			rotationVector = glm::vec3(dir * 1, 0, 0);
+			break;
 		case (Up):
-			rotationVector = glm::vec3( 0, dir *1, 0);
+			rotationVector = glm::vec3( 0, dir * -1, 0);
 			break;
 		case (Down):
-			rotationVector = glm::vec3( 0, dir *-1, 0);
+			rotationVector = glm::vec3( 0, dir *1, 0);
 			break;
 		case (Front):
-			rotationVector = glm::vec3( 0, 0, dir *1);
+			rotationVector = glm::vec3( 0, 0, dir *-1);
 			break;
 		case (Back):
-			rotationVector = glm::vec3( 0, 0, dir *-1);
+			rotationVector = glm::vec3( 0, 0, dir *1);
 			break;
 		}
 		for (int index : wallIndexes) {
