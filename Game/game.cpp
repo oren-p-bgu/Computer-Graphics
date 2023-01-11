@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "RubiksCube.h"
+#include <Bezier1D.h>
 # define PI           3.14159265358979323846  /* pi */
 static void printMat(const glm::mat4 mat)
 {
@@ -82,8 +83,15 @@ void Game::Init()
 	
 	AddTexture("../res/textures/plane.png", false);
 
-	rubiksCube = BuildRubiksCube(4);
+	AddShape(Cube, -1, TRIANGLES);
+	SetShapeTex(0, 0);
+	shapes[0]->MyScale(glm::vec3(0.5,0.5,0.5));
 
+	Shape* bez = new Bezier1D();
+	chainParents.push_back(-1);
+	shapes.push_back(bez);
+	SetShapeTex(1, 0);
+	shapes[1]->MyScale(glm::vec3(2,2,2));
 	
 	pickedShape = 0;
 	
