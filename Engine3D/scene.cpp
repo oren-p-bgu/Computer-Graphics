@@ -279,6 +279,23 @@
 				WhenRotate();
 			}
 		}
+		else {
+			// picked control point
+			glm::vec4 viewport = glm::vec4(0, 0, 512, 512);
+			glm::vec3 wincoord = glm::vec3(xold+xrel, 512 - (yold+yrel) - 1, depth);
+			glm::mat4 projection = cameras[0]->GetViewProjection();
+			glm::mat4 view = cameras[0]->MakeTrans();
+			view[3][0] = -1 * view[3][0];
+			view[3][1] = -1 * view[3][1];
+			view[3][2] = -1 * view[3][2];
+			glm::vec3 newPos = glm::unProject(wincoord,view, projection, viewport);
+			wincoord = glm::vec3(xold, 512 - (yold) - 1, depth);
+			glm::vec3 oldPos = glm::unProject(wincoord,view, projection, viewport);
+
+
+			shapes[pickedShape]->MyTranslate(oldPos - newPos, 0);
+
+		}
 	}
 
 	void Scene::RotateCube(float amount, glm::vec3 direction) {
