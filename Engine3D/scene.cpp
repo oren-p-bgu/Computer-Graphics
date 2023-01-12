@@ -284,7 +284,7 @@
 			glm::vec4 viewport = glm::vec4(0, 0, 512, 512);
 			glm::vec3 wincoord = glm::vec3(xold+xrel, 512 - (yold+yrel) - 1, depth);
 			glm::mat4 projection = cameras[0]->GetViewProjection();
-			glm::mat4 view = cameras[0]->MakeTrans();
+			glm::mat4 view = cameras[0]->MakeTrans() * MakeTrans();
 			view[3][0] = -1 * view[3][0];
 			view[3][1] = -1 * view[3][1];
 			view[3][2] = -1 * view[3][2];
