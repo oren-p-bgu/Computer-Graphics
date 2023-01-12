@@ -274,8 +274,8 @@
 			}
 			else
 			{
-				RotateCube(-xrel/2.0f,glm::vec3(0,1,0));
-				RotateCube(-yrel/2.0f,glm::vec3(1,0,0));
+				RotateRelativeGlobal (- xrel / 2.0f,glm::vec3(0, 1, 0));
+				RotateRelativeGlobal (- yrel / 2.0f,glm::vec3(1, 0, 0));
 				WhenRotate();
 			}
 		}
