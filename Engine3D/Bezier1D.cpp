@@ -1,7 +1,7 @@
 #include "Bezier1D.h"
 
 
-Bezier1D::Bezier1D(int segNum,int res,int mode, int viewport) : currentLocation(0), direction(true),  resT(res), Shape(GetLine(StartingSegments(segNum), res),mode)
+Bezier1D::Bezier1D(int segNum,int res,int mode, int viewport) : controlOcts(std::vector<Shape*>()), currentLocation(0), direction(true),  resT(res), Shape(GetLine(StartingSegments(segNum), res),mode)
 {  
     ResetCurve(segNum);
 }
@@ -73,6 +73,11 @@ void Bezier1D::AddSegment(glm::vec4 p1, glm::vec4 p2, glm::vec4 p3)
     segments.push_back(glm::mat4(p0, p1, p2, p3));
 }
 
+void Bezier1D::AddControlOct(Shape* oct)
+{
+    controlOcts.push_back(oct);
+}
+
 void Bezier1D::ChangeSegment(int segIndx,glm::vec4 p1, glm::vec4 p2, glm::vec4 p3)
 {
     glm::vec4 p0 = segments[segIndx-1][3];
@@ -88,13 +93,58 @@ glm::vec4 Bezier1D::GetCurrentLocation()
     return GetPointOnCurve(segment, t);
 }
 
-float Bezier1D::MoveControlPoint(int segment, int indx, float dx,float dy,bool preserveC1)
+float Bezier1D::MoveControlPoint(int segment, int indx, float dx,float dy,float dz, bool preserveC1)
 {
+    glm::vec4 cp = GetControlPoint(segment, indx);
+    glm::vec4 newcp = cp + glm::vec4(dx, dy, dz, 0);
+    if (segment >= GetSegmentsNum()) {
+        segment = GetSegmentsNum() - 1;
+        indx = 3;
+    }
+    segments[segment][indx] = newcp;
+    if (indx == 0) {
+        if (preserveC1) {
+            segments[segment][1] += glm::vec4(dx, dy, dz, 0);
+            MoveControlOct(segment, 1, dx, dy, dz);
+        }
+        if (segment != 0) {
+            segments[segment - 1][3] = newcp;
+			if (preserveC1) {
+				segments[segment-1][2] += glm::vec4(dx, dy, dz, 0);
+                MoveControlOct(segment-1, 2, dx, dy, dz);
+			}
+        }
+    }
+    if (indx == 3) {
+        if (preserveC1) {
+            segments[segment][2] += glm::vec4(dx, dy, dz, 0);
+            MoveControlOct(segment, 2, dx, dy, dz);
+        }
+        if (segment != (GetSegmentsNum() - 1)) {
+            segments[segment + 1][0] = newcp;
+			if (preserveC1) {
+				segments[segment+1][1] += glm::vec4(dx, dy, dz, 0);
+                MoveControlOct(segment+1, 1, dx, dy, dz);
+			}
+        }
+    }
     return 0; //not suppose to reach here
 }
 
-void Bezier1D::CurveUpdate(int pointIndx, float dx, float dy, bool preserveC1)
+void Bezier1D::CurveUpdate(int pointIndx, float dx, float dy,float dz,  bool preserveC1)
 {
+    pointIndx += std::floor(pointIndx / 3);
+    int segment = pointIndx / 4;
+    int index = pointIndx % 4;
+    MoveControlPoint(segment, index, dx, dy,dz, preserveC1);
+    mesh->ChangeLine(GetLine(segments, resT));
+    
+}
+
+void Bezier1D::MoveControlOct(int segment, int indx, float dx, float dy, float dz)
+{
+    int index = segment * 3 + indx;
+    controlOcts[index]->MyTranslate(glm::vec3(dx, dy, dz), 0);
 }
 
 void Bezier1D::ResetCurve(int segNum)

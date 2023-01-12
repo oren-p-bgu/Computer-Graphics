@@ -34,10 +34,12 @@ void Game::AddControlPoints(Bezier1D* bez) {
 	shapes[2]->MyTranslate(glm::vec3(center), 0);
 	float scale = 0.1;
 	shapes[2]->MyScale(glm::vec3(scale));
+	bez->AddControlOct(shapes[2]);
 	for (int segment = 0; segment < segNum; segment++) {
 		for (int indx = 1; indx < 4; indx++) {
 			glm::vec4 center = bez->GetControlPoint(segment, indx);
 			AddShape(Octahedron, -1, TRIANGLES);
+			bez->AddControlOct(shapes[2 + segment * 3 + indx]);
 			shapes[2+segment*3 + indx]->MyTranslate(glm::vec3(center), 0);
 			shapes[2+segment*3 + indx]->MyScale(glm::vec3(scale));
 		}

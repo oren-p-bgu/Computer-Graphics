@@ -293,7 +293,12 @@
 			glm::vec3 oldPos = glm::unProject(wincoord,view, projection, viewport);
 
 
-			shapes[pickedShape]->MyTranslate(oldPos - newPos, 0);
+			glm::vec3 diff = oldPos - newPos;
+			shapes[pickedShape]->MyTranslate(diff, 0);
+			float dx = diff[0];
+			float dy = diff[1];
+			float dz = diff[2];
+			bez->CurveUpdate(pickedShape - 2, dx,dy,dz, continuity);
 
 		}
 	}

@@ -8,9 +8,10 @@ class Bezier1D : public Shape
 	std::vector<glm::mat4> segments;
 	int resT;
 	 const static glm::mat4 M;
-	 float MoveControlPoint(int segment, int indx, float dx, float dy, bool preserveC1);  //change the position of one control point. when preserveC1 is true it may affect other  control points 
+	 float MoveControlPoint(int segment, int indx, float dx, float dy, float dz, bool preserveC1);  //change the position of one control point. when preserveC1 is true it may affect other  control points 
 	 float currentLocation; // Value of 0 to 1, represents point on combination of all segments
 	 bool direction;
+	 std::vector<Shape*> controlOcts;
 public:
 	Bezier1D() : Bezier1D(3) {}
 	Bezier1D(int segNum) : Bezier1D(segNum, 100, 3, 0) {}
@@ -25,8 +26,10 @@ public:
 	glm::vec3 GetCurrentVelocity();
 	void next(float stepSize);
 
+	void AddControlOct(Shape* oct);
+	void MoveControlOct(int segment, int indx, float dx, float dy, float dz);
 	void AddSegment(glm::vec4 p1, glm::vec4 p2, glm::vec4 p3);  // adds a segment at the end of the curve
-	void CurveUpdate(int pointIndx, float dx, float dy, bool preserveC1 = false);  //changes the line in by using ChangeLine function of MeshConstructor and MoveControlPoint 
+	void CurveUpdate(int pointIndx, float dx, float dy, float dz, bool preserveC1 = false);  //changes the line in by using ChangeLine function of MeshConstructor and MoveControlPoint 
 	void ChangeSegment(int segIndx, glm::vec4 p1, glm::vec4 p2, glm::vec4 p3); // changes three control point of a segment
 	void ResetCurve(int segNum); // to the init state
 	static std::vector<glm::mat4> StartingSegments(int segNum);
