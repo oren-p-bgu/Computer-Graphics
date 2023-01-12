@@ -245,7 +245,7 @@
 		view[3][0] = -1 * view[3][0];
 		view[3][1] = -1 * view[3][1];
 		view[3][2] = -1 * view[3][2];
-		glm::vec3 objcoord = glm::unProject(wincoord,view, projection, viewport);
+		glm::vec3 objcoord = glm::unProject(wincoord,view*MakeTrans(), projection, viewport);
 
 		printf("Coordinates in object space: %f, %f, %f\n",
 			objcoord.x, objcoord.y, objcoord.z);
