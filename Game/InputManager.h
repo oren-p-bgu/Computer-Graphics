@@ -35,7 +35,9 @@
 				case GLFW_KEY_C:
 					scn->ToggleContinuity();
 					break;
-
+				case GLFW_KEY_SPACE:
+					scn->ToggleActive();
+					break;
 				case GLFW_KEY_UP:
 					scn->MoveCamera(0,scn->zTranslate,0.4f);
 					break;

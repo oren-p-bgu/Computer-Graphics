@@ -51,6 +51,7 @@ void Game::AddBezierCurve(int segNum) {
 	}
 
 	Bezier1D* bez = new Bezier1D(segNum);
+	this->bez = bez;
 	chainParents.push_back(-1);
 	shapes.push_back(bez);
 	SetShapeTex(1, 0);
@@ -458,6 +459,9 @@ void Game::Motion()
 {
 	if(isActive)
 	{
+		glm::vec4 newLocation = bez->GetCurrentLocation();
+		shapes[0]->MyTranslate(glm::vec3(newLocation), 1);
+		bez->next(0.01);
 	}
 }
 

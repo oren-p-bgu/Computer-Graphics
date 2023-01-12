@@ -5,6 +5,7 @@
 #include "VertexArray.hpp"
 #include <vector>
 #include "RubiksCube.h"
+#include "Bezier1D.h"
 
 
 class Scene : public MovableGLM
@@ -73,6 +74,7 @@ public:
 		}
 	}
 	void ToggleContinuity() { continuity = !continuity; }
+	void ToggleActive() { isActive = !isActive; }
 	
 	inline void SetShapeTex(int shpIndx,int texIndx){shapes[shpIndx]->SetTexture(texIndx);} 
 	inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);} 
@@ -95,6 +97,7 @@ protected:
 	RubiksCube rubiksCube;
 	Direction direction;
 	bool continuity;
+	Bezier1D* bez;
 	
 	int pickedShape;
 	

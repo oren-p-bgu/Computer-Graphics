@@ -2,7 +2,6 @@
 
 //#include "Mesh.h"
 #include "../Engine3D/shape.h"
-#include <scene.h>
 
 class Bezier1D : public Shape
 {
@@ -10,6 +9,8 @@ class Bezier1D : public Shape
 	int resT;
 	 const static glm::mat4 M;
 	 float MoveControlPoint(int segment, int indx, float dx, float dy, bool preserveC1);  //change the position of one control point. when preserveC1 is true it may affect other  control points 
+	 float currentLocation; // Value of 0 to 1, represents point on combination of all segments
+	 bool direction;
 public:
 	Bezier1D() : Bezier1D(3) {}
 	Bezier1D(int segNum) : Bezier1D(segNum, 100, 3, 0) {}
@@ -20,6 +21,9 @@ public:
 	glm::vec4 GetPointOnCurve(int segment, float t) const; //returns point on curve in the requested segment for the value of t
 	glm::vec4 GetPointOnCurve(std::vector<glm::mat4> semgents, int segment, float t) const;
 	glm::vec3 GetVelocity(int segment, float t); //returns the derivative of the curve in the requested segment for the value of t
+	glm::vec4 GetCurrentLocation();
+	glm::vec3 GetCurrentVelocity();
+	void next(float stepSize);
 
 	void AddSegment(glm::vec4 p1, glm::vec4 p2, glm::vec4 p3);  // adds a segment at the end of the curve
 	void CurveUpdate(int pointIndx, float dx, float dy, bool preserveC1 = false);  //changes the line in by using ChangeLine function of MeshConstructor and MoveControlPoint 

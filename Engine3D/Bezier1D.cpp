@@ -1,7 +1,7 @@
 #include "Bezier1D.h"
 
 
-Bezier1D::Bezier1D(int segNum,int res,int mode, int viewport) :  resT(res), Shape(GetLine(StartingSegments(segNum), res),mode)
+Bezier1D::Bezier1D(int segNum,int res,int mode, int viewport) : currentLocation(0), direction(true),  resT(res), Shape(GetLine(StartingSegments(segNum), res),mode)
 {  
     ResetCurve(segNum);
 }
@@ -43,11 +43,7 @@ glm::vec4 Bezier1D::GetControlPoint(int segment, int indx) const
 
 glm::vec4 Bezier1D::GetPointOnCurve(int segment, float t) const
 {
-    glm::mat4 G = segments[segment];
-    glm::vec4 T = glm::vec4(pow(t, 3),pow(t,2), t, 1);
-    glm::vec4 TM = TM;
-    glm::vec4 TMG = TM * G;
-    return TMG;
+    return GetPointOnCurve(segments, segment, t);
 }
 
 glm::vec4 Bezier1D::GetPointOnCurve(std::vector<glm::mat4> segments, int segment, float t) const
@@ -79,6 +75,15 @@ void Bezier1D::ChangeSegment(int segIndx,glm::vec4 p1, glm::vec4 p2, glm::vec4 p
     segments[segIndx] = glm::mat4(p0, p1, p2, p3);
 }
 
+glm::vec4 Bezier1D::GetCurrentLocation()
+{
+    float segSize = 1.0 / (float)GetSegmentsNum();
+    int segment = std::floor(currentLocation / segSize);
+    float t = (float) GetSegmentsNum()* (currentLocation - (float)segment * segSize);
+
+    return GetPointOnCurve(segment, t);
+}
+
 float Bezier1D::MoveControlPoint(int segment, int indx, float dx,float dy,bool preserveC1)
 {
     return 0; //not suppose to reach here
@@ -100,6 +105,15 @@ void Bezier1D::ResetCurve(int segNum)
     segments.push_back(glm::mat4(glm::vec4(straightSegments+1,1,0,0), glm::vec4(straightSegments+1.5,1,0,0), glm::vec4(straightSegments+2,0.5,0,0), glm::vec4(straightSegments+2,0,0,0)));
 }
 
+glm::vec3 Bezier1D::GetCurrentVelocity()
+{
+    float segSize = 1.0 / (float)GetSegmentsNum();
+    int segment = std::floor(currentLocation / segSize);
+    float t = currentLocation - (float)segment * segSize;
+
+    return GetVelocity(segment, t);
+}
+
 std::vector<glm::mat4> Bezier1D::StartingSegments(int segNum) {
     std::vector<glm::mat4> segments = std::vector<glm::mat4>();
     int straightSegments = segNum - 2;
@@ -110,6 +124,26 @@ std::vector<glm::mat4> Bezier1D::StartingSegments(int segNum) {
     }
     segments.push_back(glm::mat4(glm::vec4(straightSegments+1,1,0,0), glm::vec4(straightSegments+1.5,1,0,0), glm::vec4(straightSegments+2,0.5,0,0), glm::vec4(straightSegments+2,0,0,0)));
     return segments;
+}
+
+void Bezier1D::next(float stepSize)
+{
+    float nextLocation;
+    if (direction) {
+        nextLocation = currentLocation + stepSize;
+        if (nextLocation >= 1) {
+            nextLocation = 2 - nextLocation;
+            direction = false;
+        }
+    }
+    else {
+        nextLocation = currentLocation - stepSize;
+        if (nextLocation <= 0) {
+            nextLocation = - nextLocation;
+            direction = true;
+        }
+    }
+    currentLocation = nextLocation;
 }
 
 Bezier1D::~Bezier1D(void)
