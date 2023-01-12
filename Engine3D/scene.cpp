@@ -100,7 +100,7 @@
 			{
 				glm::mat4 Model = Normal * shapes[i]->MakeTrans();
 				
-				if(shaderIndx > 0)
+				if(p != i)
 				{
 					Update(MVP,Model,shapes[i]->GetShader());
 					shapes[i]->Draw(shaders,textures,false);	

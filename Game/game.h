@@ -1,6 +1,7 @@
 #pragma once
 #include "scene.h"
 #include "RubiksCube.h"
+#include "Bezier1D.h"
 
 class Game : public Scene
 {
@@ -8,6 +9,8 @@ public:
 	
 	Game();
 	Game(float angle,float relationWH,float near, float far);
+	void AddControlPoints(Bezier1D* bez);
+	void AddBezierCurve(int segNum);
 	RubiksCube BuildRubiksCube(int dimension);
 	void Init();
 	unsigned char* Grayscale(int width, int height, unsigned char* data);

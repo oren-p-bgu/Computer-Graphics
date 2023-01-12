@@ -1,7 +1,7 @@
 #include "Bezier1D.h"
 
 
-Bezier1D::Bezier1D(int segNum,int res,int mode, int viewport) :  resT(res), Shape(GetLine(StartingSegments()),mode)
+Bezier1D::Bezier1D(int segNum,int res,int mode, int viewport) :  resT(res), Shape(GetLine(StartingSegments(segNum), res),mode)
 {  
     ResetCurve(segNum);
 }
@@ -11,15 +11,14 @@ glm::mat4 const Bezier1D::M = glm::mat4(glm::vec4(-1, 3, -3, 1),
     glm::vec4(-3, 3, 0, 0),
     glm::vec4(1, 0, 0, 0));
 
-IndexedModel Bezier1D::GetLine(std::vector<glm::mat4> startingSegments) 
+IndexedModel Bezier1D::GetLine(std::vector<glm::mat4> startingSegments, int res) 
 {
     
     IndexedModel model;
 
     std::vector<LineVertex> vertices;
-    //float stepSize = (float)GetSegmentsNum() / (float) resT;
-    float stepSize = 3.0 / 100.0;
-    for (float i = 0, index = 0; i <=3.0; i += stepSize, index++) {
+    float stepSize = (float)startingSegments.size() / (float) res;
+    for (float i = 0, index = 0; i <=startingSegments.size(); i += stepSize, index++) {
         float segment;
         float t = std::modf(i, &segment);
         glm::vec4 point = GetPointOnCurve(startingSegments, (int)segment, t);
@@ -101,9 +100,9 @@ void Bezier1D::ResetCurve(int segNum)
     segments.push_back(glm::mat4(glm::vec4(straightSegments+1,1,0,0), glm::vec4(straightSegments+1.5,1,0,0), glm::vec4(straightSegments+2,0.5,0,0), glm::vec4(straightSegments+2,0,0,0)));
 }
 
-std::vector<glm::mat4> Bezier1D::StartingSegments() {
+std::vector<glm::mat4> Bezier1D::StartingSegments(int segNum) {
     std::vector<glm::mat4> segments = std::vector<glm::mat4>();
-    int straightSegments = 1;
+    int straightSegments = segNum - 2;
     segments.push_back(glm::mat4(glm::vec4(0,0,0,0), glm::vec4(0,0.5,0,0), glm::vec4(0.5,1,0,0), glm::vec4(1,1,0,0)));
     for (int i = 1; i <= straightSegments; i++)
     {

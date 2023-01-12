@@ -27,6 +27,38 @@ Game::Game(float angle ,float relationWH, float near1, float far1) : Scene(angle
 { 	
 }
 
+void Game::AddControlPoints(Bezier1D* bez) {
+	int segNum = bez->GetSegmentsNum();
+	glm::vec4 center = bez->GetControlPoint(0, 0);
+	AddShape(Octahedron, -1, TRIANGLES);
+	shapes[2]->MyTranslate(glm::vec3(center), 0);
+	float scale = 0.1;
+	shapes[2]->MyScale(glm::vec3(scale));
+	for (int segment = 0; segment < segNum; segment++) {
+		for (int indx = 1; indx < 4; indx++) {
+			glm::vec4 center = bez->GetControlPoint(segment, indx);
+			AddShape(Octahedron, -1, TRIANGLES);
+			shapes[2+segment*3 + indx]->MyTranslate(glm::vec3(center), 0);
+			shapes[2+segment*3 + indx]->MyScale(glm::vec3(scale));
+		}
+	}
+}
+
+
+void Game::AddBezierCurve(int segNum) {
+	if (shapes.size() > 1) {
+		shapes.erase(std::next(shapes.begin(), 1), shapes.end());
+	}
+
+	Bezier1D* bez = new Bezier1D(segNum);
+	chainParents.push_back(-1);
+	shapes.push_back(bez);
+	SetShapeTex(1, 0);
+
+	AddControlPoints(bez);
+
+}
+
 RubiksCube Game::BuildRubiksCube(int dimension) {
 	RubiksCube cube = RubiksCube();
 	int index = 0;
@@ -85,17 +117,13 @@ void Game::Init()
 
 	AddShape(Cube, -1, TRIANGLES);
 	SetShapeTex(0, 0);
-	shapes[0]->MyScale(glm::vec3(0.5,0.5,0.5));
+	shapes[0]->MyScale(glm::vec3(0.3,0.3,0.3));
 
-	Shape* bez = new Bezier1D();
-	chainParents.push_back(-1);
-	shapes.push_back(bez);
-	SetShapeTex(1, 0);
-	shapes[1]->MyScale(glm::vec3(2,2,2));
+	AddBezierCurve(3);
 	
 	pickedShape = 0;
 	
-	MoveCamera(0,zTranslate,20);
+	MoveCamera(0,zTranslate,10);
 	pickedShape = -1;
 	
 	//ReadPixel(); //uncomment when you are reading from the z-buffer

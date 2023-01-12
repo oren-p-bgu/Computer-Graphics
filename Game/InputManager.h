@@ -63,6 +63,21 @@
 				case GLFW_KEY_F:
 					scn->RotateCubeWall(Front);
 					break;
+				case GLFW_KEY_2:
+					scn->AddBezierCurve(2);
+					break;
+				case GLFW_KEY_3:
+					scn->AddBezierCurve(3);
+					break;
+				case GLFW_KEY_4:
+					scn->AddBezierCurve(4);
+					break;
+				case GLFW_KEY_5:
+					scn->AddBezierCurve(5);
+					break;
+				case GLFW_KEY_6:
+					scn->AddBezierCurve(6);
+					break;
 
 			default:
 				break;
