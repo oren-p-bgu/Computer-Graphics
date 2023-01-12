@@ -51,7 +51,7 @@ public:
 	inline float GetNear(int cameraIndx){return cameras[cameraIndx]->GetNear();}
 	inline float GetFar(int cameraIndx){return cameras[cameraIndx]->GetFar();}
 
-	void ReadPixel();
+	void ReadPixel(int x, int y);
 	
 	inline float GetAngle(int cameraIndx) {return cameras[cameraIndx]->GetAngle();}
 	inline void Activate() {isActive = true; }

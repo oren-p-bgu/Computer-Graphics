@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "glad/include/glad/glad.h"
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
 
 	static void printMat(const glm::mat4 mat)
 	{
@@ -236,9 +237,28 @@
 
 	float Scene::Picking(int x,int y)
 	{
-		
-		
-		return 0;
+		ReadPixel(x, 512 -y -1);
+		glm::vec4 viewport = glm::vec4(0, 0, 512, 512);
+		glm::vec3 wincoord = glm::vec3(x, 512 - y - 1, depth);
+		glm::mat4 projection = cameras[0]->GetViewProjection();
+		glm::mat4 view = cameras[0]->MakeTrans();
+		view[3][0] = -1 * view[3][0];
+		view[3][1] = -1 * view[3][1];
+		view[3][2] = -1 * view[3][2];
+		glm::vec3 objcoord = glm::unProject(wincoord,view, projection, viewport);
+
+		printf("Coordinates in object space: %f, %f, %f\n",
+			objcoord.x, objcoord.y, objcoord.z);
+
+		for (int i = 2; i < shapes.size(); i++) {
+			Shape* shape = shapes[i];
+			if (glm::length(shape->GetOrigin() - objcoord) <= shape->GetScale()) {
+				pickedShape = i;
+				return i;
+			}
+		}
+		pickedShape = -1;
+		return -1;
 	}
 	//return coordinates in global system for a tip of arm position is local system 
 	void Scene::MouseProccessing(int button)
@@ -248,8 +268,8 @@
 			if(button == 1 )
 			{				
 
-				MyTranslate(glm::vec3(-xrel/20.0f,0,0),0);
-				MyTranslate(glm::vec3(0,yrel/20.0f,0),0);
+				MoveCamera(0, xTranslate, xrel/60.0f);
+				MoveCamera(0, yTranslate,-yrel/60.0f);
 				WhenTranslate();
 			}
 			else
@@ -320,9 +340,9 @@
 		}
 	}
 
-	void Scene::ReadPixel()
+	void Scene::ReadPixel(int x, int y)
 	{
-		glReadPixels(1,1,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&depth);
+		glReadPixels(x,y,1,1,GL_DEPTH_COMPONENT,GL_FLOAT,&depth);
 	}
 
 	void Scene::UpdatePosition(float xpos, float ypos)

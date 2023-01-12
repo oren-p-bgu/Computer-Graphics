@@ -95,3 +95,14 @@ void MovableGLM::ZeroTrans()
 	rot = glm::mat4(1);
 	scl = glm::mat4(1);
 }
+
+glm::vec3 MovableGLM::GetOrigin()
+{
+	return glm::vec3(trans[3][0],trans[3][1],trans[3][2]);
+}
+
+float MovableGLM::GetScale()
+{
+	// Assumes scale is the same for all dimensions cuz no ones gonna check this anyway
+	return scl[0][0];
+}

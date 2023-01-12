@@ -127,7 +127,7 @@ void Game::Init()
 	MoveCamera(0,zTranslate,10);
 	pickedShape = -1;
 	
-	//ReadPixel(); //uncomment when you are reading from the z-buffer
+//	ReadPixel(); //uncomment when you are reading from the z-buffer
 }
 
 unsigned char* Game::Grayscale(int width, int height, unsigned char* data)

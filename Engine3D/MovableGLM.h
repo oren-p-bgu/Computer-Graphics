@@ -15,6 +15,8 @@ public:
 	void RotateRelativeGlobal(float angle, const glm::vec3& vec);
 	void MyScale(glm::vec3 scale);
 	void ZeroTrans();
+	glm::vec3 GetOrigin();
+	float GetScale();
 private:
 	glm::mat4 trans;
 	glm::mat4 rot;
