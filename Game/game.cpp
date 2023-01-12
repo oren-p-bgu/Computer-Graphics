@@ -461,6 +461,8 @@ void Game::Motion()
 	{
 		glm::vec4 newLocation = bez->GetCurrentLocation();
 		shapes[0]->MyTranslate(glm::vec3(newLocation), 1);
+		glm::vec3 velocity = bez->GetCurrentVelocity();
+		shapes[0]->MyRotate(velocity, glm::vec3(0, 1, 0));
 		bez->next(0.01);
 	}
 }

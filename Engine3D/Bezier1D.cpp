@@ -58,7 +58,11 @@ glm::vec4 Bezier1D::GetPointOnCurve(std::vector<glm::mat4> segments, int segment
 
 glm::vec3 Bezier1D::GetVelocity(int segment, float t)
 {
-    return glm::vec3();
+    // Taken the equation from wikipedia
+    glm::vec4 derivative = (GetControlPoint(segment, 1) - GetControlPoint(segment, 0)) * (float)(3 * pow((1 - t), 2));
+    derivative += (GetControlPoint(segment, 2) - GetControlPoint(segment, 1)) * (float)(6 * (1 - t) * t);
+    derivative += (GetControlPoint(segment, 3) - GetControlPoint(segment, 2)) * (float)(3 * pow( t, 2));
+    return glm::vec3(derivative);
 }
 
 // void Bezier1D::SplitSegment(int segment, int t){}
@@ -109,7 +113,7 @@ glm::vec3 Bezier1D::GetCurrentVelocity()
 {
     float segSize = 1.0 / (float)GetSegmentsNum();
     int segment = std::floor(currentLocation / segSize);
-    float t = currentLocation - (float)segment * segSize;
+    float t = (float) GetSegmentsNum()* (currentLocation - (float)segment * segSize);
 
     return GetVelocity(segment, t);
 }

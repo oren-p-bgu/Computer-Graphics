@@ -45,6 +45,16 @@ void  MovableGLM::MyRotate(float angle,const glm::vec3 &vec,int mode)
 	rot = glm::rotate(rot,angle,vec);
 }
 
+void  MovableGLM::MyRotate(const glm::vec3 velocity, const glm::vec3 axisToShift)
+{
+	glm::vec3 normal = glm::cross(axisToShift, velocity);
+	if (normal != glm::vec3(0)) {
+		float dot = glm::dot(axisToShift, velocity);
+		float angle =  ( glm::acos(dot / (glm::length(velocity) * glm::length(axisToShift))) * (180.0 / 3.141592653589793238463));
+		rot = glm::rotate(glm::mat4(1), angle, normal);
+	}
+}
+
 void MovableGLM::RotateRelative(float angle, const glm::vec3& vec, MovableGLM other) {
 	glm::vec3 thisOrigin = glm::vec3(trans[3][0], trans[3][1], trans[3][2]);
 	glm::vec3 otherOrigin = glm::vec3(other.trans[3][0], other.trans[3][1], other.trans[3][2]);
