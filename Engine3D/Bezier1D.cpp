@@ -128,6 +128,14 @@ float Bezier1D::MoveControlPoint(int segment, int indx, float dx,float dy,float 
 			}
         }
     }
+    if (indx == 2 && segment != (GetSegmentsNum() - 1) && preserveC1) {
+        segments[segment + 1][1] -= glm::vec4(dx, dy, dz, 0);
+        MoveControlOct(segment+1, 1, -dx, -dy, -dz);
+    }
+    if (indx == 1 && segment != 0 && preserveC1) {
+        segments[segment - 1][2] -= glm::vec4(dx, dy, dz, 0);
+        MoveControlOct(segment-1, 2, -dx, -dy, -dz);
+    }
     return 0; //not suppose to reach here
 }
 

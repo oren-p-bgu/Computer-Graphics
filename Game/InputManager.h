@@ -55,22 +55,22 @@
 					break;
 
 				case GLFW_KEY_R:
-					scn->RotateCubeWall(Right);
+					scn->MoveCamera(0, 0, 0.1);
 					break;
 				case GLFW_KEY_L:
-					scn->RotateCubeWall(Left);
+					scn->MoveCamera(0, 0, -0.1);
 					break;
 				case GLFW_KEY_U:
-					scn->RotateCubeWall(Up);
+					scn->MoveCamera(0, 1, 0.1);
 					break;
 				case GLFW_KEY_D:
-					scn->RotateCubeWall(Down);
+					scn->MoveCamera(0, 1, -0.1);
 					break;
 				case GLFW_KEY_B:
-					scn->RotateCubeWall(Back);
+					scn->MoveCamera(0, 2, 0.1);
 					break;
 				case GLFW_KEY_F:
-					scn->RotateCubeWall(Front);
+					scn->MoveCamera(0, 2, -0.1);
 					break;
 				case GLFW_KEY_2:
 					scn->AddBezierCurve(2);
