@@ -32,8 +32,8 @@
 				case GLFW_KEY_ESCAPE:			
 					glfwSetWindowShouldClose(window,GLFW_TRUE);
 				break;
-				case GLFW_KEY_SPACE:
-					scn->ToggleDirection();
+				case GLFW_KEY_C:
+					scn->ToggleContinuity();
 					break;
 
 				case GLFW_KEY_UP:

@@ -72,6 +72,7 @@ public:
 			direction = Clockwise;
 		}
 	}
+	void ToggleContinuity() { continuity = !continuity; }
 	
 	inline void SetShapeTex(int shpIndx,int texIndx){shapes[shpIndx]->SetTexture(texIndx);} 
 	inline void SetShapeShader(int shpIndx,int shdrIndx){shapes[shpIndx]->SetShader(shdrIndx);} 
@@ -93,6 +94,7 @@ protected:
 
 	RubiksCube rubiksCube;
 	Direction direction;
+	bool continuity;
 	
 	int pickedShape;
 	
