@@ -61,6 +61,7 @@ public:
 
 	void UpdatePosition(float xpos, float ypos);
 	void MouseProccessing(int button);
+	void ScrollProcessing(double xoffest, double yoffset);
 	void RotateCube(float amount, glm::vec3 direction);
 	bool inline IsActive() const { return isActive;} 
 

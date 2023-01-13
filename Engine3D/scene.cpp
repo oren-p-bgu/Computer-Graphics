@@ -303,6 +303,17 @@
 		}
 	}
 
+	void Scene::ScrollProcessing(double xoffest, double yoffset) {
+		if (pickedShape == -1) {
+			MoveCamera(0, 2, -yoffset);
+		}
+		else {
+			glm::vec3 delta = glm::vec3(glm::vec4(0, 0, -yoffset/3,1) * cameras[0]->MakeTrans()*MakeTrans());
+			shapes[pickedShape]->MyTranslate(delta, 0);
+			bez->CurveUpdate(pickedShape - 2, delta[0], delta[1], delta[2], continuity);
+		}
+	}
+
 	void Scene::RotateCube(float amount, glm::vec3 direction) {
 		std::vector<int> indexes;
 		for (auto const& imap : rubiksCube.Cubes)

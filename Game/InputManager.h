@@ -17,7 +17,7 @@
 	void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	{
 		Game *scn = (Game*)glfwGetWindowUserPointer(window);
-		scn->MoveCamera(0, 2, -yoffset);
+		scn->ScrollProcessing(xoffset, yoffset);
 		
 	}
 	
